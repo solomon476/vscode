@@ -1,0 +1,173 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "username": "admin",
+      "password": "admin123",
+      "role": "Admin",
+      "name": "Chief Operations Admin",
+      "suspended": false
+    },
+    {
+      "id": "m-1",
+      "username": "john.kamau",
+      "password": "member123",
+      "role": "Member",
+      "name": "John Kamau",
+      "suspended": false
+    },
+    {
+      "id": "m-2",
+      "username": "faith.mwangi",
+      "password": "member123",
+      "role": "Member",
+      "name": "Faith Mwangi",
+      "suspended": false
+    },
+    {
+      "id": "m-3",
+      "username": "david.otieno",
+      "password": "member123",
+      "role": "Member",
+      "name": "David Otieno",
+      "suspended": false
+    },
+    {
+      "id": "m-4",
+      "username": "sarah.w",
+      "password": "member123",
+      "role": "Member",
+      "name": "Sarah Wanjiku",
+      "suspended": false
+    }
+  ],
+  "trains": [
+    {
+      "id": "tr-101",
+      "num": "Express 101",
+      "route": "Nairobi - Mombasa",
+      "dep": "Nairobi Terminus",
+      "arr": "Mombasa Terminus",
+      "time": "08:00",
+      "cap": 560,
+      "eco": 1500,
+      "first": 3000,
+      "vip": 6000,
+      "status": "On Time / Active"
+    },
+    {
+      "id": "tr-204",
+      "num": "Inter-County 204",
+      "route": "Nairobi - Kisumu",
+      "dep": "Nairobi Central",
+      "arr": "Kisumu Terminus",
+      "time": "10:30",
+      "cap": 420,
+      "eco": 1200,
+      "first": 2500,
+      "vip": 5000,
+      "status": "On Time / Active"
+    },
+    {
+      "id": "tr-305",
+      "num": "Coastliner 305",
+      "route": "Mombasa - Nairobi",
+      "dep": "Mombasa Terminus",
+      "arr": "Nairobi Terminus",
+      "time": "15:00",
+      "cap": 560,
+      "eco": 1500,
+      "first": 3000,
+      "vip": 6000,
+      "status": "On Time / Active"
+    },
+    {
+      "id": "tr-410",
+      "num": "Rift Valley Link 410",
+      "route": "Nakuru - Eldoret",
+      "dep": "Nakuru Station",
+      "arr": "Eldoret Station",
+      "time": "14:15",
+      "cap": 280,
+      "eco": 900,
+      "first": 1800,
+      "vip": 3500,
+      "status": "Maintenance"
+    },
+    {
+      "id": "tr-502",
+      "num": "Night Star 502",
+      "route": "Nairobi - Mombasa",
+      "dep": "Nairobi Terminus",
+      "arr": "Mombasa Terminus",
+      "time": "22:00",
+      "cap": 700,
+      "eco": 1800,
+      "first": 3500,
+      "vip": 7500,
+      "status": "Delayed"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "bk-9401",
+      "ref": "PRS-9401",
+      "train": "Express 101",
+      "route": "Nairobi - Mombasa",
+      "passenger": "John Kamau",
+      "class": "First Class",
+      "date": "2026-11-02",
+      "fare": 3000,
+      "member": "john.kamau",
+      "status": "Confirmed"
+    },
+    {
+      "id": "bk-9402",
+      "ref": "PRS-9402",
+      "train": "Inter-County 204",
+      "route": "Nairobi - Kisumu",
+      "passenger": "Faith Mwangi",
+      "class": "VIP Sleeper",
+      "date": "2026-11-03",
+      "fare": 5000,
+      "member": "faith.mwangi",
+      "status": "Confirmed"
+    },
+    {
+      "id": "bk-9403",
+      "ref": "PRS-9403",
+      "train": "Coastliner 305",
+      "route": "Mombasa - Nairobi",
+      "passenger": "David Otieno",
+      "class": "Economy",
+      "date": "2026-11-02",
+      "fare": 1500,
+      "member": "david.otieno",
+      "status": "Confirmed"
+    },
+    {
+      "id": "bk-9404",
+      "ref": "PRS-9404",
+      "train": "Express 101",
+      "route": "Nairobi - Mombasa",
+      "passenger": "Sarah Wanjiku",
+      "class": "First Class",
+      "date": "2026-11-04",
+      "fare": 3000,
+      "member": "sarah.w",
+      "status": "Confirmed"
+    },
+    {
+      "id": "bk-9405",
+      "ref": "PRS-9405",
+      "train": "Night Star 502",
+      "route": "Nairobi - Mombasa",
+      "passenger": "Peter Omondi",
+      "class": "VIP Sleeper",
+      "date": "2026-11-05",
+      "fare": 7500,
+      "member": "admin",
+      "status": "Confirmed"
+    }
+  ]
+}
