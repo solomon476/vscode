@@ -31,3 +31,4 @@ echo Please install Python from: https://www.python.org/downloads/
 echo Make sure to check the box: [x] "Add python.exe to PATH" during installation.
 echo.
 pause
+
