@@ -1,50 +1,42 @@
-# 🚆 Pamoja Rail Services – VS Code Edition
+# 🚆 Pamoja Rail Services – Native Desktop Edition (VS Code)
 
-A complete, standalone commercial railway management and ticket reservation system configured specifically for development and execution inside **Visual Studio Code (VS Code)** on Linux, Windows, and macOS.
+A complete, standalone commercial railway management and ticket reservation desktop system running **natively inside Visual Studio Code** on Linux, Windows, and macOS.
 
-Featuring separate **Administrator** and **Passenger Member** portals, modern **Pure Red, Crisp White & Imperial Gold** aesthetics, and zero external database dependencies.
+**100% Native Desktop Application — Zero Web Browser or Server Required.**
 
 ---
 
 ## ⚡ Quick Start: Running in VS Code
 
-### 1. Open in VS Code
-Open the repository folder in VS Code:
+### 1. Open the Project in VS Code
 ```bash
 git clone https://github.com/solomon476/vscode.git
 cd vscode
 code .
 ```
 
-### 2. Run the Application
-Choose any of these seamless methods inside VS Code:
+### 2. Run the Application Directly
 
-#### Option A: One-Key Shortcut (Recommended)
+#### Method A: Run with Python (Single Command)
+In the VS Code terminal (`Ctrl` + `` ` ``), run:
+```bash
+python3 main.py
+```
+👉 The **native Pamoja Rail Services desktop application window** will pop up immediately on your screen!
+
+#### Method B: One-Key Shortcut in VS Code
 * Press **`Ctrl` + `Shift` + `B`** (or **`F5`**).
-* VS Code will launch the local runner and automatically open the application in your default browser at `http://localhost:8000/index.html`.
+* The application window launches instantly.
 
-#### Option B: Integrated Terminal
-* Open the built-in VS Code terminal (`Ctrl` + `` ` ``).
-* Run:
-  ```bash
-  python3 run_web.py
-  ```
-
-#### Option C: VS Code Live Server
-* If you have the **Live Server** extension (`ritwickdey.LiveServer`) installed:
-* Right-click **`index.html`** in the VS Code file explorer $\rightarrow$ **"Open with Live Server"**.
-
-#### Option D: Direct Browser Launch
-* From the VS Code terminal:
-  ```bash
-  xdg-open index.html
-  ```
+#### Method C: Interactive Terminal Mode (CLI)
+If you want to operate the train system completely inside the VS Code terminal text interface:
+```bash
+python3 main.py --cli
+```
 
 ---
 
 ## 🔑 Login Credentials
-
-The system includes pre-seeded accounts configured out of the box:
 
 ### 👑 Administrator Portal
 * **Role**: Select **`Administrator`**
@@ -58,60 +50,37 @@ The system includes pre-seeded accounts configured out of the box:
   * `faith.mwangi` / `member123`
   * `david.otieno` / `member123`
   * `sarah.w` / `member123`
-* **Self-Registration**: Click **"New passenger? Register Member Account"** on the login screen to create a new member profile instantly.
+* **Self-Registration**: Click **"New passenger? Register Member Account"** to create a profile instantly.
 
 ---
 
-## 🧭 System Capabilities & Modules
+## 🧭 System Features & Capabilities
 
-### 1. 📊 Operations Overview Dashboard
-* Live KPIs: Total Bookings, Registered Members, Active Fleet, On-Time vs. Delayed/Maintenance trains.
-* Personalized welcome banner and metrics for members (Total Trips, Total Spent, Upcoming Journeys).
-
-### 2. 🎟️ Ticket Booking & Reservations
-* Self-service and administrative ticket booking across major routes (Nairobi $\leftrightarrow$ Mombasa, Kisumu, Nakuru, Eldoret).
-* Automated fare calculation by class:
-  * **Economy**: KES 1,500
-  * **First Class**: KES 3,000
-  * **VIP Sleeper**: KES 6,000
-* Automated ticket reference generation (e.g. `PRS-940x`).
-
-### 3. 👥 Passenger Traveler Directory
-* Comprehensive records manifest tracking total completed journeys, cumulative expenditure, and preferred travel classes.
-
-### 4. 🚆 Train Fleet & Timetable Operations
-* Real-time fleet management: update train numbers, routes, seat capacities, and operational statuses (*On Time / Active*, *Delayed*, *Maintenance*, *Cancelled*).
-
-### 5. 📈 System Analytics & Operational Reports
-* Real-time report generation:
-  * **Executive Financial Ledger**: Financial overview and route revenues.
-  * **Passenger Manifest Summary**: Passenger demographics and loyalty history.
-  * **Train Fleet Audit**: Capacity utilization and delay tracking.
-
-### 6. 🛡️ User Management (Admin Only)
-* Administrative oversight to inspect, suspend, reinstate, or delete passenger accounts.
+1. **📊 Operations Overview Dashboard**:
+   * Live real-time KPIs: Total Bookings, Registered Members, On-Time Fleet, Delay Alerts.
+2. **📋 Manage Bookings**:
+   * Reservation ledger table, automated ticket reference generation (`PRS-940x`), class tariffs (Economy: KES 1,500, First: KES 3,000, VIP: KES 6,000), booking cancellation.
+3. **👥 Passenger Directory**:
+   * Complete manifest tracking total trips, cumulative expenditure, and preferred travel class.
+4. **🚆 Train Fleet & Timetables**:
+   * Fleet routes across Kenya (Nairobi, Mombasa, Kisumu, Nakuru, Eldoret), departure times, passenger capacities, and live status toggles (*On Time / Active*, *Delayed*, *Maintenance*, *Cancelled*).
+5. **📈 System Reports**:
+   * Revenue analytics, class breakdown, and route performance.
+6. **🛡️ Member User Management (Admin Only)**:
+   * Account suspension, reinstatement, and permanent removal.
 
 ---
 
 ## 📁 Repository Structure
 ```text
 vscode/
-├── index.html           # Full Pamoja Rail standalone web application
-├── rail_bg.jpg          # Background visual asset
-├── run_web.py           # Single-command Python web runner & browser launcher
-├── README.md            # VS Code setup & operating instructions
-├── .vscode/             # Pre-configured VS Code settings
-│   ├── tasks.json       # Build & run tasks (Ctrl+Shift+B)
-│   ├── launch.json      # Debug configurations (F5)
+├── main.py              # Main Native Desktop GUI & CLI Application
+├── pamoja_data.json     # Local persistent data storage (auto-created)
+├── README.md            # Documentation and instructions
+├── .vscode/             # VS Code task runner & F5 launch configurations
+│   ├── tasks.json       # Run Train Services (Ctrl+Shift+B)
+│   ├── launch.json      # Debug & Launch configurations (F5)
 │   └── extensions.json # Recommended VS Code extensions
-├── WinFormsApp1/        # Complete VB.NET source files (for optional Windows builds)
+├── WinFormsApp1/        # Complete VB.NET source files
 └── WinFormsApp1.sln     # Solution file
 ```
-
----
-
-## 🎨 Visual Identity
-* **Primary Brand Red**: `#E60000` (Pure Vibrant Red)
-* **Canvas & Cards**: `#FFFFFF` / `#F8FAFC` (Porcelain White)
-* **Luxury Accents**: `#F59E0B` (Imperial Gold)
-* **Mobile Ready**: Fully responsive with adaptive drawer navigation (`☰`) for laptops, tablets, and smartphones.

@@ -2,22 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Web App (F5)",
+      "name": "Run Train Services (Desktop GUI)",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/run_web.py",
+      "program": "${workspaceFolder}/main.py",
       "console": "integratedTerminal"
     },
     {
-      "name": ".NET Core Launch (WinFormsApp1 - Windows/Wine)",
-      "type": "coreclr",
+      "name": "Run Train Services (Terminal CLI)",
+      "type": "python",
       "request": "launch",
-      "preLaunchTask": "Build .NET WinForms (Windows/Wine)",
-      "program": "${workspaceFolder}/WinFormsApp1/bin/Debug/net8.0-windows/WinFormsApp1.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/WinFormsApp1",
-      "stopAtEntry": false,
-      "console": "internalConsole"
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--cli"],
+      "console": "integratedTerminal"
     }
   ]
 }
