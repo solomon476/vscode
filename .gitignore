@@ -1,0 +1,16 @@
+# Build Artifacts
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.idea/
+
+# OS files & Python cache
+.DS_Store
+Thumbs.db
+*.zip
+__pycache__/
+*.pyc

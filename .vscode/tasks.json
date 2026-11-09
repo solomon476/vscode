@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Web App (Python Server)",
+      "type": "process",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/run_web.py"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Open Web App in Browser",
+      "type": "process",
+      "command": "xdg-open",
+      "args": [
+        "${workspaceFolder}/index.html"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/WinFormsApp1/WinFormsApp1.vbproj",
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary;ForceConsoleColor",
+        "/p:EnableWindowsTargeting=true"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build"
+      }
+    }
+  ]
+}
