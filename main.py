@@ -164,13 +164,19 @@ class PamojaRailApp(tk.Tk):
         self.clear_window()
         self.current_user = None
 
-        # Outer Container
-        outer = tk.Frame(self, bg=CLR_BG_MAIN)
-        outer.place(relx=0.5, rely=0.5, anchor="center")
+        # Railway Photo Background
+        bg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rail_bg.png")
+        if os.path.exists(bg_path):
+            try:
+                self.bg_photo = tk.PhotoImage(file=bg_path)
+                lbl_bg = tk.Label(self, image=self.bg_photo)
+                lbl_bg.place(x=0, y=0, relwidth=1, relheight=1)
+            except Exception:
+                pass
 
-        # Card Box
-        card = tk.Frame(outer, bg=CLR_CARD_BG, padx=40, pady=35, highlightbackground=CLR_RED_HEADER, highlightthickness=3)
-        card.pack()
+        # Card Box (Luminous floating card over the railway photo)
+        card = tk.Frame(self, bg=CLR_CARD_BG, padx=40, pady=32, highlightbackground=CLR_RED_HEADER, highlightthickness=3)
+        card.place(relx=0.5, rely=0.5, anchor="center")
 
         # Logo / Badge
         lbl_badge = tk.Label(card, text="🚆 PAMOJA RAIL SERVICES", font=("Segoe UI", 12, "bold"), bg=CLR_RED_HEADER, fg="#FFFFFF", padx=16, pady=5)
