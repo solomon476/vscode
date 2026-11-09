@@ -10,18 +10,18 @@
       ],
       "problemMatcher": [],
       "group": {
-        "kind": "test",
+        "kind": "build",
         "isDefault": true
       },
       "presentation": {
         "echo": true,
         "reveal": "always",
-        "focus": false,
+        "focus": true,
         "panel": "shared"
       }
     },
     {
-      "label": "Open Web App in Browser",
+      "label": "Open Web App in Default Browser",
       "type": "process",
       "command": "xdg-open",
       "args": [
@@ -30,7 +30,7 @@
       "problemMatcher": []
     },
     {
-      "label": "build",
+      "label": "Build .NET WinForms (Windows/Wine)",
       "command": "dotnet",
       "type": "process",
       "args": [
@@ -40,10 +40,7 @@
         "/consoleloggerparameters:NoSummary;ForceConsoleColor",
         "/p:EnableWindowsTargeting=true"
       ],
-      "problemMatcher": "$msCompile",
-      "group": {
-        "kind": "build"
-      }
+      "problemMatcher": "$msCompile"
     }
   ]
 }

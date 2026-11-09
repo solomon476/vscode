@@ -2,21 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (WinFormsApp1)",
+      "name": "Launch Web App (F5)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_web.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": ".NET Core Launch (WinFormsApp1 - Windows/Wine)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build",
+      "preLaunchTask": "Build .NET WinForms (Windows/Wine)",
       "program": "${workspaceFolder}/WinFormsApp1/bin/Debug/net8.0-windows/WinFormsApp1.dll",
       "args": [],
       "cwd": "${workspaceFolder}/WinFormsApp1",
       "stopAtEntry": false,
       "console": "internalConsole"
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
     }
   ]
 }
-

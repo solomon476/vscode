@@ -1,87 +1,117 @@
-# Pamoja Rail Services – Final Project
+# 🚆 Pamoja Rail Services – VS Code Edition
 
-Pamoja Rail Services is a comprehensive railway operations and ticket reservation system featuring **separate Administrator and Passenger Member portals**, modern **Pure Red, Crisp White & Imperial Gold** aesthetics, and role-based access control.
+A complete, standalone commercial railway management and ticket reservation system configured specifically for development and execution inside **Visual Studio Code (VS Code)** on Linux, Windows, and macOS.
 
-This repository includes both the **complete VB.NET Windows Forms solution** for Visual Studio and the **standalone web deployment**.
+Featuring separate **Administrator** and **Passenger Member** portals, modern **Pure Red, Crisp White & Imperial Gold** aesthetics, and zero external database dependencies.
 
 ---
 
-## 🚆 Key Features & Architecture
+## ⚡ Quick Start: Running in VS Code
+
+### 1. Open in VS Code
+Open the repository folder in VS Code:
+```bash
+git clone https://github.com/solomon476/vscode.git
+cd vscode
+code .
+```
+
+### 2. Run the Application
+Choose any of these seamless methods inside VS Code:
+
+#### Option A: One-Key Shortcut (Recommended)
+* Press **`Ctrl` + `Shift` + `B`** (or **`F5`**).
+* VS Code will launch the local runner and automatically open the application in your default browser at `http://localhost:8000/index.html`.
+
+#### Option B: Integrated Terminal
+* Open the built-in VS Code terminal (`Ctrl` + `` ` ``).
+* Run:
+  ```bash
+  python3 run_web.py
+  ```
+
+#### Option C: VS Code Live Server
+* If you have the **Live Server** extension (`ritwickdey.LiveServer`) installed:
+* Right-click **`index.html`** in the VS Code file explorer $\rightarrow$ **"Open with Live Server"**.
+
+#### Option D: Direct Browser Launch
+* From the VS Code terminal:
+  ```bash
+  xdg-open index.html
+  ```
+
+---
+
+## 🔑 Login Credentials
+
+The system includes pre-seeded accounts configured out of the box:
 
 ### 👑 Administrator Portal
-* **Operations Dashboard**: Real-time KPI metrics (Total Bookings, Registered Members, Active Fleet, On-Time Rate).
-* **Booking Management**: Comprehensive ticket database with search and administrative reservation deletion.
-* **Passenger Records**: Unified manifest of registered network passengers with trip count and expenditure totals.
-* **Train Fleet & Routes**: Manage train routes, timetables, seat capacities, and status updates (On Time, Delayed, Maintenance, Cancelled).
-* **System Reports & Financials**: Executive operations summaries, revenue statements, and timetable audits.
-* **User Management**: Direct administrative oversight over passenger accounts (Suspend, Reinstate, or Delete member accounts).
+* **Role**: Select **`Administrator`**
+* **Username**: `admin`
+* **Password**: `admin123`
 
 ### 🧍 Passenger Member Portal
-* **My Travel Dashboard**: Personalized travel metrics and quick actions for registered travelers.
-* **Book a Ticket**: Self-service ticket reservation for scheduled routes across Kenya with class selection (Economy, First Class, VIP Sleeper).
-* **My Bookings**: Review personal confirmed travel reservations.
-* **Train Schedules**: Live departure timetables and fare tariffs.
-* **Role Restrictions**: Members are restricted from administrative reports and user management.
-
----
-
-## 🎨 Visual Design
-* **Primary Color**: Pure Vivid Red (`#E60000` / `Color.FromArgb(230, 0, 0)`)
-* **Backgrounds & Cards**: Crisp Porcelain White (`#FFFFFF` / `#F8FAFC`)
-* **Accents**: Imperial Gold (`#F59E0B` / `Color.FromArgb(245, 158, 11)`)
-* **Login Experience**: Crisp luminous white glass backdrop with a bold Pure Red portal card, pure white controls, and zero credential exposure.
-
----
-
-## 💻 How to Open & Run in VB.NET (Visual Studio)
-
-1. Clone or download this repository.
-2. Open **`WinFormsApp1.sln`** in **Microsoft Visual Studio 2022** (or later).
-3. Set the build configuration to **Any CPU** or **x64**.
-4. Press **F5** or click **Start** to run the project.
-   - The startup form is **`SignUpForm`**.
-   - Select **Administrator** or **Member Portal** from the role selector.
-   - Enter credentials to enter the respective dashboard.
-
-### Pre-Seeded Default Accounts (Local DataService)
-* **Administrator**:
-  * Username: `admin`
-  * Password: `admin123`
-* **Passenger Members**:
+* **Role**: Select **`Member Portal`**
+* **Pre-seeded Accounts**:
   * `john.kamau` / `member123`
   * `faith.mwangi` / `member123`
   * `david.otieno` / `member123`
   * `sarah.w` / `member123`
-  * Or click **Register Member Account** to create a new passenger account instantly.
-
-*(Note: The VB.NET forms include a resilient `DataService` that operates both with local in-memory records and can optionally connect to MySQL on `localhost:3306` database `pamoja_rail`)*.
+* **Self-Registration**: Click **"New passenger? Register Member Account"** on the login screen to create a new member profile instantly.
 
 ---
 
-## 🌐 Web Version
-Open **`index.html`** in any modern web browser on laptop or mobile. It features:
-* Inverted Pure Red login card on a crisp white backdrop.
-* Full mobile navigation drawer (`☰`) for smartphones and tablets.
-* Dynamic local storage persistence (`localStorage`).
+## 🧭 System Capabilities & Modules
+
+### 1. 📊 Operations Overview Dashboard
+* Live KPIs: Total Bookings, Registered Members, Active Fleet, On-Time vs. Delayed/Maintenance trains.
+* Personalized welcome banner and metrics for members (Total Trips, Total Spent, Upcoming Journeys).
+
+### 2. 🎟️ Ticket Booking & Reservations
+* Self-service and administrative ticket booking across major routes (Nairobi $\leftrightarrow$ Mombasa, Kisumu, Nakuru, Eldoret).
+* Automated fare calculation by class:
+  * **Economy**: KES 1,500
+  * **First Class**: KES 3,000
+  * **VIP Sleeper**: KES 6,000
+* Automated ticket reference generation (e.g. `PRS-940x`).
+
+### 3. 👥 Passenger Traveler Directory
+* Comprehensive records manifest tracking total completed journeys, cumulative expenditure, and preferred travel classes.
+
+### 4. 🚆 Train Fleet & Timetable Operations
+* Real-time fleet management: update train numbers, routes, seat capacities, and operational statuses (*On Time / Active*, *Delayed*, *Maintenance*, *Cancelled*).
+
+### 5. 📈 System Analytics & Operational Reports
+* Real-time report generation:
+  * **Executive Financial Ledger**: Financial overview and route revenues.
+  * **Passenger Manifest Summary**: Passenger demographics and loyalty history.
+  * **Train Fleet Audit**: Capacity utilization and delay tracking.
+
+### 6. 🛡️ User Management (Admin Only)
+* Administrative oversight to inspect, suspend, reinstate, or delete passenger accounts.
 
 ---
 
 ## 📁 Repository Structure
+```text
+vscode/
+├── index.html           # Full Pamoja Rail standalone web application
+├── rail_bg.jpg          # Background visual asset
+├── run_web.py           # Single-command Python web runner & browser launcher
+├── README.md            # VS Code setup & operating instructions
+├── .vscode/             # Pre-configured VS Code settings
+│   ├── tasks.json       # Build & run tasks (Ctrl+Shift+B)
+│   ├── launch.json      # Debug configurations (F5)
+│   └── extensions.json # Recommended VS Code extensions
+├── WinFormsApp1/        # Complete VB.NET source files (for optional Windows builds)
+└── WinFormsApp1.sln     # Solution file
 ```
-├── WinFormsApp1.sln                 # Visual Studio Solution File
-├── WinFormsApp1/                    # VB.NET Project Files
-│   ├── WinFormsApp1.vbproj          # .NET 8 Windows Forms Project
-│   ├── DataService.vb               # Central Data, Auth & Mock Records Service
-│   ├── SignUpForm.vb                # Inverted Pure Red & White Login Screen
-│   ├── MainDashboard.vb             # Dual-Portal Main Operations Dashboard
-│   ├── UserManagementForm.vb        # Admin Member Account Management
-│   ├── BookingForm.vb               # Ticket Reservation Form
-│   ├── PassengerForm.vb             # Passenger Records Directory Form
-│   ├── TrainForm.vb                 # Train Fleet & Timetable Form
-│   ├── ReportForm.vb                # System Analytics & Report Viewer
-│   └── download.jpg                 # Railway Background Asset
-├── index.html                       # Responsive Pure Red Web Application
-├── rail_bg.jpg                      # High-Resolution Background Graphic
-├── .gitignore                       # Clean Git configuration
-└── README.md                        # Documentation & Setup Guide
-```
+
+---
+
+## 🎨 Visual Identity
+* **Primary Brand Red**: `#E60000` (Pure Vibrant Red)
+* **Canvas & Cards**: `#FFFFFF` / `#F8FAFC` (Porcelain White)
+* **Luxury Accents**: `#F59E0B` (Imperial Gold)
+* **Mobile Ready**: Fully responsive with adaptive drawer navigation (`☰`) for laptops, tablets, and smartphones.
