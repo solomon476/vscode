@@ -10,6 +10,9 @@ Runs natively in VS Code on Linux, Windows, and macOS.
 import os
 import sys
 import json
+import random
+import time
+from datetime import datetime
 import tkinter as tk
 from tkinter import ttk, messagebox
 
@@ -787,10 +790,10 @@ class PamojaRailApp(tk.Tk):
 
         tk.Label(dlg, text="Travel Date (YYYY-MM-DD):", font=("Segoe UI", 9, "bold"), bg=CLR_BG_MAIN, fg=CLR_TEXT_DARK, anchor="w").pack(fill="x")
         ent_d = tk.Entry(dlg, font=("Segoe UI", 10))
-        ent_d.pack(fill="x", pady=(2, 20))
+        ent_d.pack(fill="x", pady=(2, 18))
         ent_d.insert(0, "2026-11-15")
 
-        def confirm():
+        def get_booking_params():
             pname = ent_p.get().strip()
             route = cmb_r.get()
             t_class_raw = cmb_c.get()
@@ -798,7 +801,7 @@ class PamojaRailApp(tk.Tk):
 
             if not pname or not date:
                 messagebox.showwarning("Warning", "Please fill out all fields.", parent=dlg)
-                return
+                return None
 
             if "Economy" in t_class_raw:
                 cls_name = "Economy"
@@ -810,10 +813,22 @@ class PamojaRailApp(tk.Tk):
                 cls_name = "VIP Sleeper"
                 fare = 6000
 
-            # Match train
             matched_train = next((t["num"] for t in self.db.trains if t["route"] == route), "Express 101")
-            new_ref = f"PRS-{9400 + len(self.db.bookings) + 1}"
+            return pname, route, cls_name, fare, date, matched_train
 
+        def pay_via_mpesa():
+            params = get_booking_params()
+            if not params:
+                return
+            pname, route, cls_name, fare, date, matched_train = params
+            self.show_mpesa_stk_dialog(pname, route, cls_name, fare, date, matched_train, dlg)
+
+        def reserve_without_pay():
+            params = get_booking_params()
+            if not params:
+                return
+            pname, route, cls_name, fare, date, matched_train = params
+            new_ref = f"PRS-{9400 + len(self.db.bookings) + 1}"
             new_booking = {
                 "id": f"bk-{len(self.db.bookings)+1}",
                 "ref": new_ref,
@@ -824,17 +839,173 @@ class PamojaRailApp(tk.Tk):
                 "date": date,
                 "fare": fare,
                 "member": self.current_user["username"],
-                "status": "Confirmed"
+                "status": "Reserved (Unpaid)"
             }
             self.db.bookings.append(new_booking)
             self.db.save()
-
-            messagebox.showinfo("Confirmed!", f"Ticket Reserved Successfully!\n\nReference: {new_ref}\nFare: KES {fare:,}\nTrain: {matched_train}", parent=dlg)
+            messagebox.showinfo("Ticket Reserved", f"Reservation Created!\n\nReference: {new_ref}\nFare: KES {fare:,}\nStatus: Reserved (Pay at Counter)", parent=dlg)
             dlg.destroy()
             self.nav_bookings()
 
-        tk.Button(dlg, text="Confirm & Issue Ticket", font=("Segoe UI", 10, "bold"), bg=CLR_RED_HEADER, fg="#FFFFFF",
-                  relief="flat", cursor="hand2", command=confirm).pack(fill="x", ipady=6)
+        # Action Buttons
+        tk.Button(dlg, text="📲 Pay via M-Pesa STK Push", font=("Segoe UI", 10, "bold"),
+                  bg="#16A34A", fg="#FFFFFF", activebackground="#15803D", activeforeground="#FFFFFF",
+                  relief="flat", cursor="hand2", command=pay_via_mpesa).pack(fill="x", ipady=7, pady=(0, 8))
+
+        tk.Button(dlg, text="Reserve Without Payment (Counter Pay)", font=("Segoe UI", 9),
+                  bg="#E2E8F0", fg=CLR_TEXT_DARK, activebackground="#CBD5E1",
+                  relief="flat", cursor="hand2", command=reserve_without_pay).pack(fill="x", ipady=4)
+
+    def show_mpesa_stk_dialog(self, pname, route, cls_name, fare, date, matched_train, parent_dlg):
+        stk_dlg = tk.Toplevel(self)
+        stk_dlg.title("Lipa na M-Pesa Online - STK Push Gateway")
+        stk_dlg.geometry("460x490")
+        stk_dlg.resizable(False, False)
+        stk_dlg.configure(bg="#F0FDF4", padx=25, pady=20)
+        stk_dlg.transient(self)
+        stk_dlg.grab_set()
+
+        # Header Badge
+        hdr_frame = tk.Frame(stk_dlg, bg="#16A34A", padx=15, pady=10)
+        hdr_frame.pack(fill="x", pady=(0, 15))
+        tk.Label(hdr_frame, text="🟢 LIPA NA M-PESA ONLINE", font=("Segoe UI", 12, "bold"), bg="#16A34A", fg="#FFFFFF").pack(side="left")
+        tk.Label(hdr_frame, text="STK PUSH", font=("Segoe UI", 9, "bold"), bg="#15803D", fg="#FEF08A", padx=8, pady=2).pack(side="right")
+
+        # Details Card
+        card = tk.Frame(stk_dlg, bg="#FFFFFF", padx=20, pady=15, relief="solid", bd=1, highlightbackground="#BBF7D0")
+        card.pack(fill="x", pady=(0, 15))
+
+        new_ref = f"PRS-{9400 + len(self.db.bookings) + 1}"
+
+        def make_row(lbl, val, bold=False):
+            r = tk.Frame(card, bg="#FFFFFF")
+            r.pack(fill="x", pady=2)
+            tk.Label(r, text=lbl, font=("Segoe UI", 9), bg="#FFFFFF", fg=CLR_TEXT_MUTED).pack(side="left")
+            tk.Label(r, text=val, font=("Segoe UI", 9, "bold" if bold else "normal"), bg="#FFFFFF", fg=CLR_TEXT_DARK).pack(side="right")
+
+        make_row("Business Name:", "Pamoja Rail Services Ltd")
+        make_row("Paybill Number:", "888822", bold=True)
+        make_row("Account Number:", new_ref, bold=True)
+        make_row("Journey / Route:", route)
+        make_row("Class & Train:", f"{cls_name} ({matched_train})")
+
+        div = tk.Frame(card, height=1, bg="#E2E8F0")
+        div.pack(fill="x", pady=8)
+
+        total_row = tk.Frame(card, bg="#FFFFFF")
+        total_row.pack(fill="x")
+        tk.Label(total_row, text="Total Amount to Pay:", font=("Segoe UI", 11, "bold"), bg="#FFFFFF", fg=CLR_TEXT_DARK).pack(side="left")
+        tk.Label(total_row, text=f"KES {fare:,}.00", font=("Segoe UI", 13, "bold"), bg="#FFFFFF", fg="#16A34A").pack(side="right")
+
+        # Phone Number input
+        tk.Label(stk_dlg, text="Enter Safaricom M-Pesa Phone Number:", font=("Segoe UI", 9, "bold"), bg="#F0FDF4", fg=CLR_TEXT_DARK, anchor="w").pack(fill="x")
+        ent_phone = tk.Entry(stk_dlg, font=("Segoe UI", 11), relief="solid", bd=1)
+        ent_phone.pack(fill="x", pady=(2, 12), ipady=3)
+        ent_phone.insert(0, "0712345678")
+
+        # Status / Feedback label
+        lbl_status = tk.Label(stk_dlg, text="Ready to initiate secure STK push to mobile handset.", font=("Segoe UI", 9), bg="#F0FDF4", fg=CLR_TEXT_MUTED)
+        lbl_status.pack(pady=(0, 10))
+
+        def send_stk():
+            phone = ent_phone.get().strip()
+            if len(phone) < 9:
+                messagebox.showwarning("Invalid Phone", "Please enter a valid Safaricom phone number (e.g. 0712345678).", parent=stk_dlg)
+                return
+
+            lbl_status.configure(text=f"📲 STK Push Prompt sent to {phone}! Check your phone...", fg="#16A34A")
+            btn_send.configure(state="disabled")
+
+            # Pop up the simulated phone PIN modal
+            self.show_simulated_phone_prompt(phone, fare, new_ref, pname, route, matched_train, cls_name, date, stk_dlg, parent_dlg)
+
+        btn_send = tk.Button(stk_dlg, text="📲 Send STK Push Prompt", font=("Segoe UI", 10, "bold"),
+                             bg="#16A34A", fg="#FFFFFF", activebackground="#15803D", activeforeground="#FFFFFF",
+                             relief="flat", cursor="hand2", command=send_stk)
+        btn_send.pack(fill="x", ipady=6)
+
+    def show_simulated_phone_prompt(self, phone, fare, new_ref, pname, route, matched_train, cls_name, date, stk_dlg, parent_dlg):
+        prompt_dlg = tk.Toplevel(self)
+        prompt_dlg.title("Simulated Handset PIN Prompt")
+        prompt_dlg.geometry("380x360")
+        prompt_dlg.resizable(False, False)
+        prompt_dlg.configure(bg="#0F172A", padx=20, pady=20)
+        prompt_dlg.transient(self)
+        prompt_dlg.grab_set()
+
+        # Phone frame
+        phone_box = tk.Frame(prompt_dlg, bg="#1E293B", padx=15, pady=15, relief="solid", bd=2, highlightbackground="#38BDF8")
+        phone_box.pack(fill="both", expand=True)
+
+        tk.Label(phone_box, text="📲 SAFARICOM M-PESA", font=("Segoe UI", 11, "bold"), bg="#1E293B", fg="#4ADE80").pack(pady=(0, 10))
+
+        prompt_msg = f"Do you want to pay KES {fare:,.0f} to PAMOJA RAIL SERVICES for Account {new_ref}?"
+        tk.Label(phone_box, text=prompt_msg, font=("Segoe UI", 10), bg="#1E293B", fg="#F8FAFC", wraplength=310, justify="center").pack(pady=(0, 12))
+
+        tk.Label(phone_box, text="Enter M-Pesa PIN:", font=("Segoe UI", 9, "bold"), bg="#1E293B", fg="#94A3B8").pack()
+        ent_pin = tk.Entry(phone_box, font=("Segoe UI", 12, "bold"), show="•", width=10, justify="center")
+        ent_pin.pack(pady=(4, 15))
+        ent_pin.insert(0, "1234")
+        ent_pin.focus_set()
+
+        lbl_proc = tk.Label(phone_box, text="", font=("Segoe UI", 9), bg="#1E293B", fg="#38BDF8")
+        lbl_proc.pack(pady=(0, 8))
+
+        def complete_payment():
+            pin = ent_pin.get().strip()
+            if len(pin) < 4:
+                messagebox.showwarning("PIN Required", "Please enter 4-digit M-Pesa PIN.", parent=prompt_dlg)
+                return
+
+            lbl_proc.configure(text="⏳ Validating PIN with Safaricom Daraja API...")
+            btn_ok.configure(state="disabled")
+
+            def finish():
+                chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+                receipt = "QHK" + "".join(random.choice(chars) for _ in range(7))
+                
+                new_booking = {
+                    "id": f"bk-{len(self.db.bookings)+1}",
+                    "ref": new_ref,
+                    "train": matched_train,
+                    "route": route,
+                    "passenger": pname,
+                    "class": cls_name,
+                    "date": date,
+                    "fare": fare,
+                    "member": self.current_user["username"],
+                    "status": f"Paid (M-Pesa: {receipt})",
+                    "mpesa_receipt": receipt,
+                    "phone": phone
+                }
+                self.db.bookings.append(new_booking)
+                self.db.save()
+
+                prompt_dlg.destroy()
+                stk_dlg.destroy()
+                parent_dlg.destroy()
+
+                msg = (f"✅ M-PESA PAYMENT SUCCESSFUL!\n\n"
+                       f"Receipt Code: {receipt}\n"
+                       f"Amount: KES {fare:,.2f} Paid\n"
+                       f"Phone: {phone}\n"
+                       f"Ticket Ref: {new_ref}\n"
+                       f"Passenger: {pname}\n\n"
+                       f"Your train ticket is now confirmed and paid!")
+                messagebox.showinfo("Payment Confirmed", msg, parent=self)
+                self.nav_bookings()
+
+            prompt_dlg.after(600, finish)
+
+        btn_row = tk.Frame(phone_box, bg="#1E293B")
+        btn_row.pack(fill="x")
+
+        tk.Button(btn_row, text="Cancel", font=("Segoe UI", 9), bg="#475569", fg="#FFFFFF", relief="flat", padx=15, pady=4,
+                  command=prompt_dlg.destroy).pack(side="left", expand=True)
+
+        btn_ok = tk.Button(btn_row, text="Authorize & Pay", font=("Segoe UI", 9, "bold"), bg="#16A34A", fg="#FFFFFF", relief="flat", padx=15, pady=4,
+                           command=complete_payment)
+        btn_ok.pack(side="right", expand=True)
 
     def show_add_train_dialog(self):
         dlg = tk.Toplevel(self)
@@ -941,21 +1112,44 @@ def run_cli_mode(db):
         elif choice == "3":
             pname = input("Passenger Name: ").strip() or user["name"]
             route = input("Route [default: Nairobi - Mombasa]: ").strip() or "Nairobi - Mombasa"
+            cls_opt = input("Ticket Class [1: Economy KES 1,500, 2: First Class KES 3,000, 3: VIP KES 6,000 (default: 2)]: ").strip()
+            fare = 1500 if cls_opt == "1" else (6000 if cls_opt == "3" else 3000)
+            cls_name = "Economy" if cls_opt == "1" else ("VIP Sleeper" if cls_opt == "3" else "First Class")
             ref = f"PRS-{9400 + len(db.bookings) + 1}"
+            
+            print(f"\nTrip Total: KES {fare:,}")
+            pay_opt = input("Pay via M-Pesa STK Push? [Y/n]: ").strip().lower()
+            if pay_opt != "n":
+                phone = input("Enter Safaricom M-Pesa Phone [default: 0712345678]: ").strip() or "0712345678"
+                print(f"\n📲 [STK PUSH SENT] Check your handset: Pay KES {fare:,} to PAMOJA RAIL SERVICES (Account {ref})")
+                pin = input("Enter M-Pesa PIN [4 digits]: ").strip() or "1234"
+                print("⏳ Validating transaction with Safaricom Daraja API...")
+                time.sleep(0.5)
+                chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+                receipt = "QHK" + "".join(random.choice(chars) for _ in range(7))
+                status = f"Paid (M-Pesa: {receipt})"
+                print(f"✅ M-PESA CONFIRMED! Receipt: {receipt} | Amount: KES {fare:,} | Ticket: {ref}")
+            else:
+                status = "Reserved (Unpaid)"
+                receipt = ""
+                phone = ""
+                print(f"✅ Ticket Reserved for Counter Payment. Ref: {ref}")
+
             db.bookings.append({
                 "id": f"bk-{len(db.bookings)+1}",
                 "ref": ref,
                 "train": "Express 101",
                 "route": route,
                 "passenger": pname,
-                "class": "First Class",
+                "class": cls_name,
                 "date": "2026-11-20",
-                "fare": 3000,
+                "fare": fare,
                 "member": user["username"],
-                "status": "Confirmed"
+                "status": status,
+                "mpesa_receipt": receipt,
+                "phone": phone
             })
             db.save()
-            print(f"✅ Ticket Confirmed! Ref: {ref} (KES 3,000)")
         elif choice == "4" and user["role"] == "Admin":
             print("\n👥 PASSENGER MANIFEST:")
             for m in [x for x in db.users if x["role"] == "Member"]:
